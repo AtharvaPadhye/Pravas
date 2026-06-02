@@ -485,6 +485,37 @@ h1 {
   background: rgba(15, 118, 110, 0.08);
 }
 
+.dashboard-card.has-created-trip {
+  border-color: rgba(15, 118, 110, 0.34);
+  background: linear-gradient(
+      135deg,
+      rgba(15, 118, 110, 0.12),
+      rgba(255, 255, 255, 0.78) 42%
+    ),
+    rgba(255, 255, 255, 0.82);
+}
+
+.dashboard-card.has-created-trip .live-pill {
+  color: white;
+  background: var(--teal-dark);
+}
+
+.dashboard-share-link {
+  display: block;
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  color: var(--teal-dark);
+  font-weight: 800;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  background: rgba(15, 118, 110, 0.1);
+}
+
+.dashboard-share-link[hidden] {
+  display: none;
+}
+
 @media (max-width: 860px) {
   .site-header {
     align-items: flex-start;
