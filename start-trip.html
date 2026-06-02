@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Start a Pravas trip by naming your journey, inviting friends, and choosing private or shareable trip visibility."
+    />
+    <title>Start a trip | Pravas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand" href="index.html#hero" aria-label="Pravas home">
+          <span class="brand-mark">P</span>
+          <span>Pravas</span>
+        </a>
+        <nav class="nav-links" aria-label="Main menu">
+          <a href="index.html#how-it-works">How it works</a>
+          <a href="index.html#dashboard">Dashboard</a>
+          <a href="index.html#features">Features</a>
+        </nav>
+        <a class="nav-cta" href="index.html#waitlist">Join waitlist</a>
+      </header>
+
+      <main>
+        <section class="start-hero" aria-labelledby="start-trip-title">
+          <div class="start-copy">
+            <a class="back-link" href="index.html#how-it-works">← How it works</a>
+            <p class="eyebrow">Step 01 · Start a trip</p>
+            <h1 id="start-trip-title">
+              Create the shared travel hub before anyone packs.
+            </h1>
+            <p class="hero-text">
+              Set the destination, invite the people coming along, and decide
+              whether your Pravas dashboard stays private or becomes a polished
+              share link for friends following from home.
+            </p>
+            <div class="start-stats" aria-label="Start trip highlights">
+              <div><strong>3 min</strong><span>to set up</span></div>
+              <div><strong>Private</strong><span>by default</span></div>
+              <div><strong>Live</strong><span>when you choose</span></div>
+            </div>
+          </div>
+
+          <form class="trip-builder-card" aria-label="Start a trip form">
+            <div class="builder-header">
+              <div>
+                <p>Trip builder</p>
+                <h2>Pacific Northwest loop</h2>
+              </div>
+              <span class="draft-pill">Private draft</span>
+            </div>
+
+            <label class="field-group" for="trip-name">
+              <span>Trip name</span>
+              <input
+                id="trip-name"
+                name="trip-name"
+                type="text"
+                value="Pacific Northwest loop"
+                autocomplete="off"
+              />
+            </label>
+
+            <div class="field-row">
+              <label class="field-group" for="trip-start">
+                <span>Starts</span>
+                <input id="trip-start" name="trip-start" type="date" value="2026-08-14" />
+              </label>
+              <label class="field-group" for="trip-end">
+                <span>Ends</span>
+                <input id="trip-end" name="trip-end" type="date" value="2026-08-21" />
+              </label>
+            </div>
+
+            <div class="field-group invite-field">
+              <span>Invite friends</span>
+              <div class="invite-composer">
+                <span class="friend-chip">Maya</span>
+                <span class="friend-chip">Leo</span>
+                <span class="friend-chip">Nora</span>
+                <button type="button" class="add-friend-button">+ Add</button>
+              </div>
+            </div>
+
+            <fieldset class="privacy-panel">
+              <legend>Visibility</legend>
+              <label class="privacy-option">
+                <input type="radio" name="visibility" checked />
+                <span>
+                  <strong>Private trip</strong>
+                  <small>Only invited travelers can view and add moments.</small>
+                </span>
+              </label>
+              <label class="privacy-option">
+                <input type="radio" name="visibility" />
+                <span>
+                  <strong>Shareable link</strong>
+                  <small>Create a read-only dashboard for followers.</small>
+                </span>
+              </label>
+            </fieldset>
+
+            <button class="button button-primary trip-submit" type="button">
+              Create trip draft
+            </button>
+          </form>
+        </section>
+
+        <section class="section start-details" aria-labelledby="start-details-title">
+          <div class="section-heading">
+            <p class="eyebrow">What gets created</p>
+            <h2 id="start-details-title">A clean launch pad for every journey.</h2>
+          </div>
+          <div class="launch-grid">
+            <article>
+              <span class="launch-icon">✦</span>
+              <h3>Trip profile</h3>
+              <p>
+                Add the name, dates, destination, and vibe so every place and
+                memory is grouped into the right adventure from day one.
+              </p>
+            </article>
+            <article>
+              <span class="launch-icon">☻</span>
+              <h3>Collaborator list</h3>
+              <p>
+                Invite travelers before departure, then let them follow the
+                same timeline, add context, and keep the group in sync.
+              </p>
+            </article>
+            <article>
+              <span class="launch-icon">⌁</span>
+              <h3>Sharing controls</h3>
+              <p>
+                Keep the dashboard locked to your group or publish a read-only
+                link when you want family and friends to follow along.
+              </p>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
