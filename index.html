@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Pravas is a social vacation tracker that turns your hotel stays, restaurants, activities, and memories into live trip dashboards."
+    />
+    <title>Pravas | Vacation tracking for modern explorers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand" href="#hero" aria-label="Pravas home">
+          <span class="brand-mark">P</span>
+          <span>Pravas</span>
+        </a>
+        <nav class="nav-links" aria-label="Main menu">
+          <a href="#how-it-works">How it works</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#features">Features</a>
+        </nav>
+        <a class="nav-cta" href="#waitlist">Join waitlist</a>
+      </header>
+
+      <main>
+        <section class="hero" id="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Strava for vacations</p>
+            <h1>Capture every stay, bite, and adventure automatically.</h1>
+            <p class="hero-text">
+              Pravas turns your travels into beautiful live dashboards for you
+              and the friends you invite. Hotels, restaurants, activities, and
+              day-by-day memories appear as your trip unfolds.
+            </p>
+            <div class="hero-actions" id="waitlist">
+              <a
+                class="button button-primary"
+                href="mailto:hello@pravas.app?subject=Join%20the%20Pravas%20waitlist"
+                >Join the beta</a
+              >
+              <a class="button button-secondary" href="#dashboard"
+                >Preview dashboard</a
+              >
+            </div>
+            <div class="trust-row" aria-label="Product highlights">
+              <span>Live trip maps</span>
+              <span>Friend viewing</span>
+              <span>Daily timelines</span>
+            </div>
+          </div>
+
+          <div class="phone-card" aria-label="Example Pravas trip dashboard">
+            <div class="phone-topbar">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="trip-header">
+              <p>Now tracking</p>
+              <h2>Lisbon Weekend</h2>
+              <span>Shared with 8 friends</span>
+            </div>
+            <div class="map-preview">
+              <span class="pin pin-hotel">Hotel</span>
+              <span class="pin pin-food">Dinner</span>
+              <span class="pin pin-activity">Surf</span>
+            </div>
+            <div class="timeline-list">
+              <article>
+                <span class="timeline-dot hotel"></span>
+                <div>
+                  <strong>Checked into Memmo Alfama</strong>
+                  <p>9:18 AM · Alfama</p>
+                </div>
+              </article>
+              <article>
+                <span class="timeline-dot food"></span>
+                <div>
+                  <strong>Lunch at Time Out Market</strong>
+                  <p>1:04 PM · Cais do Sodré</p>
+                </div>
+              </article>
+              <article>
+                <span class="timeline-dot activity"></span>
+                <div>
+                  <strong>Sunset sail on the Tagus</strong>
+                  <p>6:42 PM · Belém</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="how-it-works">
+          <div class="section-heading">
+            <p class="eyebrow">How it works</p>
+            <h2>Your vacation journal, assembled in the background.</h2>
+          </div>
+          <div class="steps-grid">
+            <article class="step-card">
+              <span>01</span>
+              <h3>Start a trip</h3>
+              <p>
+                Create a trip, invite friends, and choose whether it stays
+                private or becomes shareable.
+              </p>
+            </article>
+            <article class="step-card">
+              <span>02</span>
+              <h3>Move naturally</h3>
+              <p>
+                Pravas organizes hotels, restaurants, attractions, and
+                activities into a clean daily timeline.
+              </p>
+            </article>
+            <article class="step-card">
+              <span>03</span>
+              <h3>Relive together</h3>
+              <p>
+                Friends can follow your dashboard during the journey and browse
+                a polished recap afterward.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="dashboard-section" id="dashboard">
+          <div class="dashboard-copy">
+            <p class="eyebrow">Trip dashboard</p>
+            <h2>One beautiful view for where you went and what you loved.</h2>
+            <p>
+              Turn fragmented photos, reservations, map pins, and group chats
+              into a rich travel feed that is easy to share and impossible to
+              lose.
+            </p>
+          </div>
+          <div class="dashboard-card">
+            <div class="dashboard-card-header">
+              <div>
+                <p>Amalfi Coast</p>
+                <h3>5 days · 24 places</h3>
+              </div>
+              <span class="live-pill">Live</span>
+            </div>
+            <div class="metric-grid">
+              <div><strong>3</strong><span>Hotels</span></div>
+              <div><strong>12</strong><span>Meals</span></div>
+              <div><strong>9</strong><span>Activities</span></div>
+            </div>
+            <div class="day-plan">
+              <div><span>Day 3</span><strong>Capri boat tour</strong></div>
+              <div><span>Next</span><strong>Dinner at La Tagliata</strong></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="features">
+          <div class="section-heading">
+            <p class="eyebrow">Built for social travel</p>
+            <h2>
+              Designed for travelers who want memories without manual logging.
+            </h2>
+          </div>
+          <div class="feature-grid">
+            <article>
+              <h3>Private by default</h3>
+              <p>
+                Share only the trips and moments you choose with specific
+                friends or groups.
+              </p>
+            </article>
+            <article>
+              <h3>Context-rich places</h3>
+              <p>
+                See hotels, restaurants, activities, photos, and notes in the
+                same chronological story.
+              </p>
+            </article>
+            <article>
+              <h3>Post-trip recaps</h3>
+              <p>
+                Generate polished itineraries and recommendations after every
+                adventure.
+              </p>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
