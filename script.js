@@ -1,3 +1,5 @@
+const TRIP_DRAFT_STORAGE_KEY = "pravasTripDraft";
+
 const livePill = document.querySelector(".live-pill");
 
 if (livePill) {
@@ -43,6 +45,18 @@ const previewFriends = document.querySelector("#preview-friends");
 const previewVisibility = document.querySelector("#preview-visibility");
 const previewLink = document.querySelector("#preview-link");
 
+const dashboardCard = document.querySelector("#home-trip-dashboard");
+const dashboardName = document.querySelector("[data-dashboard-name]");
+const dashboardSummary = document.querySelector("[data-dashboard-summary]");
+const dashboardPill = document.querySelector("[data-dashboard-pill]");
+const dashboardDays = document.querySelector("[data-dashboard-days]");
+const dashboardFriends = document.querySelector("[data-dashboard-friends]");
+const dashboardVisibility = document.querySelector("[data-dashboard-visibility]");
+const dashboardDateLabel = document.querySelector("[data-dashboard-date-label]");
+const dashboardDateDetail = document.querySelector("[data-dashboard-date-detail]");
+const dashboardCrew = document.querySelector("[data-dashboard-crew]");
+const dashboardShare = document.querySelector("[data-dashboard-share]");
+
 const defaultFriends = ["Maya", "Leo", "Nora"];
 let invitedFriends = [...defaultFriends];
 
@@ -60,6 +74,37 @@ const formatDate = (dateValue) => {
     year: "numeric",
   }).format(date);
 };
+
+const getTripLength = (startsAt, endsAt) => {
+  if (!startsAt || !endsAt) {
+    return 0;
+  }
+
+  const start = new Date(`${startsAt}T00:00:00`);
+  const end = new Date(`${endsAt}T00:00:00`);
+  const millisecondsPerDay = 24 * 60 * 60 * 1000;
+  const days = Math.round((end - start) / millisecondsPerDay) + 1;
+
+  return Math.max(days, 1);
+};
+
+const getStoredTripDraft = () => {
+  const storedDraft = window.localStorage.getItem(TRIP_DRAFT_STORAGE_KEY);
+
+  if (!storedDraft) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(storedDraft);
+  } catch {
+    window.localStorage.removeItem(TRIP_DRAFT_STORAGE_KEY);
+    return null;
+  }
+};
+
+const pluralize = (count, singular, plural = `${singular}s`) =>
+  `${count} ${count === 1 ? singular : plural}`;
 
 const getVisibility = () => {
   const selected = document.querySelector('input[name="visibility"]:checked');
@@ -165,7 +210,7 @@ const removeFriend = (index) => {
 
 const validateTrip = () => {
   if (!tripNameInput?.value.trim()) {
-    setStatus("Add a trip name to create a draft.", "error");
+    setStatus("Add a trip name to create your trip.", "error");
     tripNameInput?.focus();
     return false;
   }
@@ -215,6 +260,54 @@ const updateDraftPreview = (draft) => {
   draftPreview.hidden = false;
 };
 
+const renderHomeDashboard = () => {
+  if (!dashboardCard) {
+    return;
+  }
+
+  const tripDraft = getStoredTripDraft();
+
+  if (!tripDraft) {
+    return;
+  }
+
+  const tripLength = getTripLength(tripDraft.startsAt, tripDraft.endsAt);
+  const friendCount = tripDraft.friends?.length || 0;
+  const visibilityLabel =
+    tripDraft.visibility === "shareable" ? "Shared" : "Private";
+  const crewLabel = friendCount
+    ? tripDraft.friends.join(", ")
+    : "No friends invited yet";
+
+  dashboardCard.classList.add("has-created-trip");
+  dashboardName.textContent = tripDraft.name;
+  dashboardSummary.textContent = `${pluralize(tripLength, "day")} · ${pluralize(
+    friendCount,
+    "friend",
+  )}`;
+  dashboardPill.textContent = "Created";
+  dashboardDays.textContent = String(tripLength);
+  dashboardFriends.textContent = String(friendCount);
+  dashboardVisibility.textContent = visibilityLabel;
+  dashboardDateLabel.textContent = "Trip dates";
+  dashboardDateDetail.textContent = `${formatDate(tripDraft.startsAt)} → ${formatDate(
+    tripDraft.endsAt,
+  )}`;
+  dashboardCrew.textContent = crewLabel;
+
+  if (tripDraft.shareUrl) {
+    dashboardShare.hidden = false;
+    dashboardShare.href = tripDraft.shareUrl;
+    dashboardShare.textContent = `Share dashboard: ${tripDraft.shareUrl}`;
+  } else {
+    dashboardShare.hidden = true;
+    dashboardShare.removeAttribute("href");
+    dashboardShare.textContent = "";
+  }
+};
+
+renderHomeDashboard();
+
 if (tripBuilderForm) {
   renderFriends();
   updateBuilderTitle();
@@ -262,13 +355,16 @@ if (tripBuilderForm) {
     tripDraft.shareUrl =
       tripDraft.visibility === "shareable" ? getShareUrl(tripDraft.name) : "";
 
-    window.localStorage.setItem("pravasTripDraft", JSON.stringify(tripDraft));
+    window.localStorage.setItem(
+      TRIP_DRAFT_STORAGE_KEY,
+      JSON.stringify(tripDraft),
+    );
     updateDraftPreview(tripDraft);
-    setStatus("Trip draft created and saved in this browser.", "success");
+    setStatus("Trip created. Opening your home dashboard…", "success");
 
-    tripSubmit.textContent = "Draft saved";
+    tripSubmit.textContent = "Opening dashboard";
     window.setTimeout(() => {
-      tripSubmit.textContent = "Create trip draft";
-    }, 1800);
+      window.location.href = "index.html#dashboard";
+    }, 650);
   });
 }

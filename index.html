@@ -144,23 +144,34 @@
               lose.
             </p>
           </div>
-          <div class="dashboard-card">
+          <div class="dashboard-card" id="home-trip-dashboard">
             <div class="dashboard-card-header">
               <div>
-                <p>Amalfi Coast</p>
-                <h3>5 days · 24 places</h3>
+                <p data-dashboard-name>Amalfi Coast</p>
+                <h3 data-dashboard-summary>5 days · 24 places</h3>
               </div>
-              <span class="live-pill">Live</span>
+              <span class="live-pill" data-dashboard-pill>Live</span>
             </div>
             <div class="metric-grid">
-              <div><strong>3</strong><span>Hotels</span></div>
-              <div><strong>12</strong><span>Meals</span></div>
-              <div><strong>9</strong><span>Activities</span></div>
+              <div><strong data-dashboard-days>5</strong><span>Days</span></div>
+              <div>
+                <strong data-dashboard-friends>8</strong><span>Friends</span>
+              </div>
+              <div>
+                <strong data-dashboard-visibility>Live</strong><span>Status</span>
+              </div>
             </div>
             <div class="day-plan">
-              <div><span>Day 3</span><strong>Capri boat tour</strong></div>
-              <div><span>Next</span><strong>Dinner at La Tagliata</strong></div>
+              <div>
+                <span data-dashboard-date-label>Day 3</span
+                ><strong data-dashboard-date-detail>Capri boat tour</strong>
+              </div>
+              <div>
+                <span>Travel crew</span
+                ><strong data-dashboard-crew>Dinner at La Tagliata</strong>
+              </div>
             </div>
+            <a class="dashboard-share-link" data-dashboard-share hidden></a>
           </div>
         </section>
 
