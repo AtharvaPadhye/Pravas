@@ -51,7 +51,11 @@
             </div>
           </div>
 
-          <form class="trip-builder-card" aria-label="Start a trip form">
+          <form
+            id="trip-builder-form"
+            class="trip-builder-card"
+            aria-label="Start a trip form"
+          >
             <div class="builder-header">
               <div>
                 <p>Trip builder</p>
@@ -68,26 +72,45 @@
                 type="text"
                 value="Pacific Northwest loop"
                 autocomplete="off"
+                required
               />
             </label>
 
             <div class="field-row">
               <label class="field-group" for="trip-start">
                 <span>Starts</span>
-                <input id="trip-start" name="trip-start" type="date" value="2026-08-14" />
+                <input
+                  id="trip-start"
+                  name="trip-start"
+                  type="date"
+                  value="2026-08-14"
+                  required
+                />
               </label>
               <label class="field-group" for="trip-end">
                 <span>Ends</span>
-                <input id="trip-end" name="trip-end" type="date" value="2026-08-21" />
+                <input
+                  id="trip-end"
+                  name="trip-end"
+                  type="date"
+                  value="2026-08-21"
+                  required
+                />
               </label>
             </div>
 
             <div class="field-group invite-field">
               <span>Invite friends</span>
               <div class="invite-composer">
-                <span class="friend-chip">Maya</span>
-                <span class="friend-chip">Leo</span>
-                <span class="friend-chip">Nora</span>
+                <div class="friend-list" aria-label="Invited friends"></div>
+                <label class="sr-only" for="friend-name">Friend name</label>
+                <input
+                  id="friend-name"
+                  name="friend-name"
+                  type="text"
+                  placeholder="Add a friend"
+                  autocomplete="off"
+                />
                 <button type="button" class="add-friend-button">+ Add</button>
               </div>
             </div>
@@ -95,14 +118,14 @@
             <fieldset class="privacy-panel">
               <legend>Visibility</legend>
               <label class="privacy-option">
-                <input type="radio" name="visibility" checked />
+                <input type="radio" name="visibility" value="private" checked />
                 <span>
                   <strong>Private trip</strong>
                   <small>Only invited travelers can view and add moments.</small>
                 </span>
               </label>
               <label class="privacy-option">
-                <input type="radio" name="visibility" />
+                <input type="radio" name="visibility" value="shareable" />
                 <span>
                   <strong>Shareable link</strong>
                   <small>Create a read-only dashboard for followers.</small>
@@ -110,9 +133,19 @@
               </label>
             </fieldset>
 
-            <button class="button button-primary trip-submit" type="button">
+            <p id="trip-builder-status" class="form-status" aria-live="polite"></p>
+            <button class="button button-primary trip-submit" type="submit">
               Create trip draft
             </button>
+
+            <output id="draft-preview" class="draft-preview" hidden>
+              <span class="draft-preview-label">Draft ready</span>
+              <strong id="preview-name"></strong>
+              <span id="preview-dates"></span>
+              <span id="preview-friends"></span>
+              <span id="preview-visibility"></span>
+              <a id="preview-link" hidden></a>
+            </output>
           </form>
         </section>
 
