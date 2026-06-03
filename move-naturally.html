@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Build the Pravas move naturally flow by adding hotels, restaurants, sights, and activities to an automatic daily timeline."
+    />
+    <title>Move naturally | Pravas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand" href="index.html#hero" aria-label="Pravas home">
+          <span class="brand-mark">P</span>
+          <span>Pravas</span>
+        </a>
+        <nav class="nav-links" aria-label="Main menu">
+          <a href="index.html#how-it-works">How it works</a>
+          <a href="start-trip.html">Start a trip</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="relive-together.html">Relive</a>
+        </nav>
+        <a class="nav-cta" href="relive-together.html">Build recap</a>
+      </header>
+
+      <main>
+        <section class="workflow-hero" aria-labelledby="move-title">
+          <div class="workflow-copy">
+            <a class="back-link" href="index.html#how-it-works">← How it works</a>
+            <p class="eyebrow">Step 02 · Move naturally</p>
+            <h1 id="move-title">Drop moments in as you go. Pravas sorts the story.</h1>
+            <p class="hero-text">
+              Capture the lightweight signals travelers already have—hotel
+              check-ins, dinner receipts, saved places, quick notes—and turn
+              them into a calm daily timeline without forcing anyone to journal
+              in the moment.
+            </p>
+            <div class="start-stats" aria-label="Move naturally highlights">
+              <div><strong>4 signals</strong><span>hotels, meals, sights, activities</span></div>
+              <div><strong>Auto-sorted</strong><span>by day and time</span></div>
+              <div><strong>Group-ready</strong><span>everyone adds context</span></div>
+            </div>
+          </div>
+
+          <form id="moment-capture-form" class="trip-builder-card moment-capture-card" aria-label="Add a trip moment">
+            <div class="builder-header">
+              <div>
+                <p>Live trip inbox</p>
+                <h2 data-moment-trip-title>Plan a trip first</h2>
+              </div>
+              <span class="draft-pill" data-moment-count>0 moments</span>
+            </div>
+
+            <div class="no-trip-callout" data-no-trip-callout hidden>
+              <h3>Create the trip hub first</h3>
+              <p>
+                Step 02 works best after Step 01 because every moment needs a
+                home base, invite list, and date range.
+              </p>
+              <a class="button button-secondary" href="start-trip.html">Start a trip</a>
+            </div>
+
+            <label class="field-group" for="moment-type">
+              <span>Signal type</span>
+              <select id="moment-type" name="moment-type">
+                <option value="hotel">Hotel check-in</option>
+                <option value="restaurant">Restaurant or cafe</option>
+                <option value="sight">Sightseeing stop</option>
+                <option value="activity">Activity</option>
+              </select>
+            </label>
+
+            <label class="field-group" for="moment-title">
+              <span>What happened?</span>
+              <input id="moment-title" name="moment-title" type="text" value="Checked into the Ace Hotel" required />
+            </label>
+
+            <div class="field-row">
+              <label class="field-group" for="moment-place">
+                <span>Place</span>
+                <input id="moment-place" name="moment-place" type="text" value="Portland" required />
+              </label>
+              <label class="field-group" for="moment-time">
+                <span>When</span>
+                <input id="moment-time" name="moment-time" type="datetime-local" />
+              </label>
+            </div>
+
+            <label class="field-group" for="moment-note">
+              <span>Optional context</span>
+              <textarea id="moment-note" name="moment-note" rows="3" placeholder="Add the receipt note, reservation detail, or why this should make the recap."></textarea>
+            </label>
+
+            <div class="quick-signal-row" aria-label="Quick add moment templates">
+              <button type="button" data-quick-moment="hotel">+ Hotel</button>
+              <button type="button" data-quick-moment="restaurant">+ Meal</button>
+              <button type="button" data-quick-moment="sight">+ Sight</button>
+              <button type="button" data-quick-moment="activity">+ Activity</button>
+            </div>
+
+            <p id="moment-capture-status" class="form-status" aria-live="polite"></p>
+            <button class="button button-primary trip-submit" type="submit">Add to timeline</button>
+          </form>
+        </section>
+
+        <section class="section workflow-section" aria-labelledby="timeline-title">
+          <div class="section-heading">
+            <p class="eyebrow">Automatic daily timeline</p>
+            <h2 id="timeline-title">A useful travel log for today and recap material for later.</h2>
+          </div>
+          <div class="moment-layout">
+            <div class="timeline-board" data-moment-timeline></div>
+            <aside class="workflow-panel">
+              <span class="launch-icon">⌁</span>
+              <h3>Why this workflow feels natural</h3>
+              <p>
+                Travelers only add the smallest useful signal. Pravas handles
+                categorizing, ordering, and preserving the context so the group
+                can stay present on the trip.
+              </p>
+              <a class="button button-secondary" href="relive-together.html">Continue to Step 03</a>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

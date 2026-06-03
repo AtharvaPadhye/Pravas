@@ -691,11 +691,359 @@ if (tripBuilderForm) {
       JSON.stringify(tripDraft),
     );
     updateDraftPreview(tripDraft);
-    setStatus("Trip created. Opening your dashboard…", "success");
+    setStatus("Trip created. Opening Step 02 so you can add moments…", "success");
 
-    tripSubmit.textContent = "Opening dashboard";
+    tripSubmit.textContent = "Opening Step 02";
     window.setTimeout(() => {
-      window.location.href = "dashboard.html";
+      window.location.href = "move-naturally.html";
     }, 650);
   });
 }
+
+const TRIP_MOMENTS_STORAGE_KEY = "pravasTripMoments";
+const momentCaptureForm = document.querySelector("#moment-capture-form");
+const momentTripTitle = document.querySelector("[data-moment-trip-title]");
+const momentCount = document.querySelector("[data-moment-count]");
+const noTripCallout = document.querySelector("[data-no-trip-callout]");
+const momentTypeInput = document.querySelector("#moment-type");
+const momentTitleInput = document.querySelector("#moment-title");
+const momentPlaceInput = document.querySelector("#moment-place");
+const momentTimeInput = document.querySelector("#moment-time");
+const momentNoteInput = document.querySelector("#moment-note");
+const momentCaptureStatus = document.querySelector("#moment-capture-status");
+const momentTimeline = document.querySelector("[data-moment-timeline]");
+const quickMomentButtons = document.querySelectorAll("[data-quick-moment]");
+const recapTitle = document.querySelector("[data-recap-title]");
+const recapTripLabel = document.querySelector("[data-recap-trip-label]");
+const recapSummary = document.querySelector("[data-recap-summary]");
+const recapDays = document.querySelector("[data-recap-days]");
+const recapPlaces = document.querySelector("[data-recap-places]");
+const recapFriends = document.querySelector("[data-recap-friends]");
+const recapBestList = document.querySelector("[data-recap-best-list]");
+const recapFollowup = document.querySelector("[data-recap-followup]");
+const recapTimeline = document.querySelector("[data-recap-timeline]");
+const copyRecapButton = document.querySelector("[data-copy-recap]");
+const recapStatus = document.querySelector("[data-recap-status]");
+
+const momentTemplates = {
+  hotel: {
+    title: "Checked into the Ace Hotel",
+    place: "Portland",
+    note: "Reservation confirmed and the lobby coffee bar is worth saving.",
+  },
+  restaurant: {
+    title: "Dinner at Kann",
+    place: "Southeast Portland",
+    note: "Add to best bites: smoky mushrooms, plantains, and a table everyone loved.",
+  },
+  sight: {
+    title: "Walked the Japanese Garden",
+    place: "Washington Park",
+    note: "Quiet morning stop with the best group photo of the day.",
+  },
+  activity: {
+    title: "Sunset bike ride",
+    place: "Waterfront Park",
+    note: "Easy loop, golden-hour skyline, and a route worth recommending.",
+  },
+};
+
+const momentIcons = {
+  hotel: "🏨",
+  restaurant: "🍽️",
+  sight: "📍",
+  activity: "✨",
+};
+
+const getStoredMoments = () => {
+  const storedMoments = window.localStorage.getItem(TRIP_MOMENTS_STORAGE_KEY);
+
+  if (!storedMoments) {
+    return [];
+  }
+
+  try {
+    const moments = JSON.parse(storedMoments);
+    return Array.isArray(moments) ? moments : [];
+  } catch {
+    window.localStorage.removeItem(TRIP_MOMENTS_STORAGE_KEY);
+    return [];
+  }
+};
+
+const saveStoredMoments = (moments) => {
+  window.localStorage.setItem(TRIP_MOMENTS_STORAGE_KEY, JSON.stringify(moments));
+};
+
+const getMomentDateTimeValue = (tripDraft) => {
+  const date = tripDraft?.startsAt || new Date().toISOString().slice(0, 10);
+  return `${date}T09:00`;
+};
+
+const setMomentStatus = (message, type = "info") => {
+  if (!momentCaptureStatus) {
+    return;
+  }
+
+  momentCaptureStatus.textContent = message;
+  momentCaptureStatus.dataset.type = type;
+};
+
+const formatMomentDay = (dateTime) => {
+  if (!dateTime) {
+    return "Unscheduled";
+  }
+
+  return formatDate(dateTime.slice(0, 10));
+};
+
+const formatMomentTime = (dateTime) => {
+  if (!dateTime) {
+    return "Anytime";
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(dateTime));
+};
+
+const getMomentsForCurrentTrip = () => {
+  const tripDraft = getStoredTripDraft();
+  const moments = getStoredMoments();
+
+  if (!tripDraft) {
+    return [];
+  }
+
+  const tripSlug = getSlug(tripDraft.name);
+  return moments.filter((moment) => moment.tripSlug === tripSlug);
+};
+
+const renderMomentTimeline = () => {
+  if (!momentTimeline) {
+    return;
+  }
+
+  const tripMoments = getMomentsForCurrentTrip().sort((a, b) =>
+    a.dateTime.localeCompare(b.dateTime),
+  );
+
+  if (momentCount) {
+    momentCount.textContent = pluralize(tripMoments.length, "moment");
+  }
+
+  if (!tripMoments.length) {
+    momentTimeline.innerHTML = `
+      <div class="timeline-empty">
+        <p>Add your first hotel, meal, sight, or activity and Pravas will start sorting the trip by day.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const momentsByDay = tripMoments.reduce((groups, moment) => {
+    const day = formatMomentDay(moment.dateTime);
+    groups[day] = groups[day] || [];
+    groups[day].push(moment);
+    return groups;
+  }, {});
+
+  momentTimeline.innerHTML = Object.entries(momentsByDay)
+    .map(
+      ([day, moments]) => `
+        <section class="timeline-day" aria-label="${escapeHtml(day)} moments">
+          <h3>${escapeHtml(day)}</h3>
+          ${moments
+            .map(
+              (moment) => `
+                <article class="moment-row">
+                  <span class="moment-icon" aria-hidden="true">${momentIcons[moment.type] || "✦"}</span>
+                  <div>
+                    <h4>${escapeHtml(moment.title)}</h4>
+                    <p>${escapeHtml(moment.place)} · ${escapeHtml(moment.note || "Ready for photos, receipts, and group notes.")}</p>
+                  </div>
+                  <span class="moment-time-label">${escapeHtml(formatMomentTime(moment.dateTime))}</span>
+                </article>
+              `,
+            )
+            .join("")}
+        </section>
+      `,
+    )
+    .join("");
+};
+
+const initializeMomentPage = () => {
+  if (!momentCaptureForm && !momentTimeline) {
+    return;
+  }
+
+  const tripDraft = getStoredTripDraft();
+
+  if (momentTripTitle) {
+    momentTripTitle.textContent = tripDraft?.name || "Plan a trip first";
+  }
+
+  if (noTripCallout) {
+    noTripCallout.hidden = Boolean(tripDraft);
+  }
+
+  if (momentTimeInput && !momentTimeInput.value) {
+    momentTimeInput.value = getMomentDateTimeValue(tripDraft);
+  }
+
+  renderMomentTimeline();
+};
+
+const applyMomentTemplate = (type) => {
+  const template = momentTemplates[type];
+
+  if (!template) {
+    return;
+  }
+
+  if (momentTypeInput) {
+    momentTypeInput.value = type;
+  }
+  if (momentTitleInput) {
+    momentTitleInput.value = template.title;
+  }
+  if (momentPlaceInput) {
+    momentPlaceInput.value = template.place;
+  }
+  if (momentNoteInput) {
+    momentNoteInput.value = template.note;
+  }
+
+  momentTitleInput?.focus();
+};
+
+quickMomentButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    applyMomentTemplate(button.dataset.quickMoment);
+  });
+});
+
+momentCaptureForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const tripDraft = getStoredTripDraft();
+
+  if (!tripDraft) {
+    setMomentStatus("Create a trip first so this moment has somewhere to live.", "error");
+    return;
+  }
+
+  if (!momentTitleInput?.value.trim() || !momentPlaceInput?.value.trim()) {
+    setMomentStatus("Add what happened and where it happened.", "error");
+    (!momentTitleInput?.value.trim() ? momentTitleInput : momentPlaceInput)?.focus();
+    return;
+  }
+
+  const moments = getStoredMoments();
+  const moment = {
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    tripSlug: getSlug(tripDraft.name),
+    type: momentTypeInput?.value || "activity",
+    title: momentTitleInput.value.trim(),
+    place: momentPlaceInput.value.trim(),
+    dateTime: momentTimeInput?.value || getMomentDateTimeValue(tripDraft),
+    note: momentNoteInput?.value.trim() || "",
+    createdAt: new Date().toISOString(),
+  };
+
+  moments.push(moment);
+  saveStoredMoments(moments);
+  renderMomentTimeline();
+  setMomentStatus(`${moment.title} was added to the trip timeline.`, "success");
+  applyMomentTemplate(moment.type);
+});
+
+const getRecapUrl = (tripDraft) =>
+  tripDraft?.shareUrl || `https://pravas.app/recap/${getSlug(tripDraft?.name)}`;
+
+const renderRecapPage = () => {
+  if (!recapTitle) {
+    return;
+  }
+
+  const tripDraft = getStoredTripDraft();
+  const tripMoments = getMomentsForCurrentTrip().sort((a, b) =>
+    a.dateTime.localeCompare(b.dateTime),
+  );
+  const uniquePlaces = new Set(tripMoments.map((moment) => moment.place));
+
+  if (!tripDraft) {
+    if (recapBestList) {
+      recapBestList.innerHTML = `<li>Start a trip and add a few moments to generate the best-of list.</li>`;
+    }
+    if (recapTimeline) {
+      recapTimeline.innerHTML = `<li>Your day-by-day recap will appear here.</li>`;
+    }
+    return;
+  }
+
+  const tripLength = getTripLength(tripDraft.startsAt, tripDraft.endsAt);
+  const friendCount = tripDraft.friends?.length || 0;
+  const recapUrl = getRecapUrl(tripDraft);
+
+  recapTripLabel.textContent = tripDraft.visibility === "shareable" ? "Shareable recap" : "Private recap";
+  recapTitle.textContent = `${tripDraft.name} recap`;
+  recapSummary.textContent = tripMoments.length
+    ? `${pluralize(tripMoments.length, "moment")} from ${tripDraft.name} are organized into a polished story for the crew.`
+    : "Add moments during the trip and Pravas will transform them into a polished story for the crew.";
+  recapDays.textContent = String(tripLength);
+  recapPlaces.textContent = String(uniquePlaces.size);
+  recapFriends.textContent = String(friendCount);
+
+  if (recapBestList) {
+    const bestMoments = tripMoments.slice(0, 5);
+    recapBestList.innerHTML = bestMoments.length
+      ? bestMoments
+          .map((moment) => `<li>${escapeHtml(moment.title)} · ${escapeHtml(moment.place)}</li>`)
+          .join("")
+      : `<li>Add a restaurant, sight, or activity in Step 02 to create recommendations.</li>`;
+  }
+
+  if (recapFollowup) {
+    const friends = friendCount ? tripDraft.friends.join(", ") : "your invited travelers";
+    recapFollowup.textContent = `Send ${friends} one link after the trip: ${recapUrl}. They can revisit favorite stops, copy recommendations, and keep the shared memory in one place.`;
+  }
+
+  if (recapTimeline) {
+    recapTimeline.innerHTML = tripMoments.length
+      ? tripMoments
+          .slice(0, 6)
+          .map(
+            (moment) =>
+              `<li>${escapeHtml(formatMomentDay(moment.dateTime))}: ${escapeHtml(moment.title)}</li>`,
+          )
+          .join("")
+      : `<li>Add moments in Step 02 and the recap timeline will build itself.</li>`;
+  }
+};
+
+copyRecapButton?.addEventListener("click", async () => {
+  const tripDraft = getStoredTripDraft();
+
+  if (!tripDraft) {
+    recapStatus.textContent = "Start a trip before copying a recap link.";
+    recapStatus.dataset.type = "error";
+    return;
+  }
+
+  const recapUrl = getRecapUrl(tripDraft);
+
+  try {
+    await navigator.clipboard.writeText(recapUrl);
+    recapStatus.textContent = "Recap link copied for your follow-up message.";
+    recapStatus.dataset.type = "success";
+  } catch {
+    recapStatus.textContent = `Copy this recap link: ${recapUrl}`;
+    recapStatus.dataset.type = "info";
+  }
+});
+
+initializeMomentPage();
+renderRecapPage();

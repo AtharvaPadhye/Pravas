@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Build a Pravas post-trip recap from captured travel moments and prepare a shareable vacation story for friends."
+    />
+    <title>Relive together | Pravas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand" href="index.html#hero" aria-label="Pravas home">
+          <span class="brand-mark">P</span>
+          <span>Pravas</span>
+        </a>
+        <nav class="nav-links" aria-label="Main menu">
+          <a href="index.html#how-it-works">How it works</a>
+          <a href="start-trip.html">Start a trip</a>
+          <a href="move-naturally.html">Move</a>
+          <a href="dashboard.html">Dashboard</a>
+        </nav>
+        <a class="nav-cta" href="move-naturally.html">Add moments</a>
+      </header>
+
+      <main>
+        <section class="workflow-hero recap-hero" aria-labelledby="relive-title">
+          <div class="workflow-copy">
+            <a class="back-link" href="index.html#how-it-works">← How it works</a>
+            <p class="eyebrow">Step 03 · Relive together</p>
+            <h1 id="relive-title">Turn the trip into a recap people actually want to open.</h1>
+            <p class="hero-text">
+              Pravas turns your live timeline into a polished after-trip page:
+              best places, day-by-day highlights, crew credits, and a simple
+              share flow for friends who followed along.
+            </p>
+          </div>
+
+          <article class="recap-card" aria-label="Generated trip recap">
+            <div class="recap-cover">
+              <span data-recap-trip-label>Trip recap</span>
+              <h2 data-recap-title>Start a trip to generate your recap</h2>
+              <p data-recap-summary>
+                Your captured moments will become a shareable story with days,
+                places, and highlights.
+              </p>
+            </div>
+            <div class="recap-metrics">
+              <div><strong data-recap-days>0</strong><span>Days</span></div>
+              <div><strong data-recap-places>0</strong><span>Places</span></div>
+              <div><strong data-recap-friends>0</strong><span>Friends</span></div>
+            </div>
+            <div class="recap-actions">
+              <button class="button button-primary" type="button" data-copy-recap>Copy recap link</button>
+              <a class="button button-secondary" href="move-naturally.html">Add moments</a>
+            </div>
+            <p class="form-status" data-recap-status aria-live="polite"></p>
+          </article>
+        </section>
+
+        <section class="section workflow-section" aria-labelledby="recap-plan-title">
+          <div class="section-heading">
+            <p class="eyebrow">Share-ready recap</p>
+            <h2 id="recap-plan-title">Everything the group needs after the bags are unpacked.</h2>
+          </div>
+          <div class="recap-layout">
+            <article class="workflow-panel">
+              <span class="launch-icon">✦</span>
+              <h3>Best-of list</h3>
+              <ul data-recap-best-list></ul>
+            </article>
+            <article class="workflow-panel">
+              <span class="launch-icon">☻</span>
+              <h3>Friend follow-up</h3>
+              <p data-recap-followup>
+                Invite your travelers first, then Pravas will prepare a follow-up
+                note with the recap link and saved recommendations.
+              </p>
+            </article>
+            <article class="workflow-panel">
+              <span class="launch-icon">⌁</span>
+              <h3>Timeline preview</h3>
+              <ol data-recap-timeline></ol>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
