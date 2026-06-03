@@ -1157,3 +1157,167 @@ h1 {
     padding: 44px 0;
   }
 }
+
+.dashboard-trip-card {
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.dashboard-trip-card:hover,
+.dashboard-trip-card:focus-within {
+  transform: translateY(-4px);
+  border-color: rgba(15, 118, 110, 0.32);
+}
+
+.dashboard-trip-open {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 18px;
+  border: 0;
+  border-radius: 999px;
+  color: white;
+  font: inherit;
+  font-weight: 900;
+  background: var(--teal-dark);
+  cursor: pointer;
+}
+
+.trip-ai-details {
+  padding: 0 0 78px;
+}
+
+.trip-ai-details[hidden] {
+  display: none;
+}
+
+.trip-ai-details-shell {
+  padding: 30px;
+  border: 1px solid rgba(15, 118, 110, 0.24);
+  border-radius: 36px;
+  background:
+    linear-gradient(135deg, rgba(15, 118, 110, 0.12), transparent 38%),
+    rgba(255, 255, 255, 0.82);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(22px);
+}
+
+.trip-ai-details-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.trip-ai-details-heading h2 {
+  margin-bottom: 14px;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 0.98;
+}
+
+.trip-ai-details-heading p:not(.eyebrow) {
+  max-width: 760px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.trip-ai-close {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--teal-dark);
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+}
+
+.trip-ai-signal-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0 26px;
+}
+
+.trip-ai-signal-row span {
+  padding: 9px 12px;
+  border-radius: 999px;
+  color: var(--teal-dark);
+  font-weight: 900;
+  background: rgba(15, 118, 110, 0.1);
+}
+
+.trip-ai-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.trip-ai-category-grid article,
+.trip-ai-moments {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: rgba(255, 250, 241, 0.78);
+}
+
+.trip-ai-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  background: rgba(15, 118, 110, 0.1);
+}
+
+.trip-ai-category-grid h3,
+.trip-ai-moments h3 {
+  margin: 16px 0 12px;
+}
+
+.trip-ai-category-grid ul,
+.trip-ai-moments ol {
+  display: grid;
+  gap: 12px;
+  padding-left: 1.15rem;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.trip-ai-category-grid li::marker,
+.trip-ai-moments li::marker {
+  color: var(--teal);
+  font-weight: 900;
+}
+
+.trip-ai-moments {
+  margin-top: 18px;
+}
+
+.trip-ai-moments .eyebrow {
+  margin-bottom: 8px;
+}
+
+@media (max-width: 900px) {
+  .trip-ai-category-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .trip-ai-details-shell {
+    padding: 22px;
+    border-radius: 28px;
+  }
+
+  .trip-ai-details-heading {
+    flex-direction: column;
+  }
+}

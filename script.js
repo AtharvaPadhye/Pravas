@@ -61,6 +61,16 @@ const emptyYourTrips = document.querySelector("[data-empty-your-trips]");
 const yourTripCount = document.querySelector("[data-your-trip-count]");
 const friendTripsGrid = document.querySelector("[data-friend-trips]");
 const friendTripCount = document.querySelector("[data-friend-trip-count]");
+const tripAiDetails = document.querySelector("[data-trip-ai-details]");
+const tripAiTitle = document.querySelector("[data-trip-ai-title]");
+const tripAiSummary = document.querySelector("[data-trip-ai-summary]");
+const tripAiSignals = document.querySelector("[data-trip-ai-signals]");
+const tripAiHotels = document.querySelector("[data-trip-ai-hotels]");
+const tripAiRestaurants = document.querySelector("[data-trip-ai-restaurants]");
+const tripAiSights = document.querySelector("[data-trip-ai-sights]");
+const tripAiMoments = document.querySelector("[data-trip-ai-moments]");
+const tripAiClose = document.querySelector("[data-trip-ai-close]");
+const dashboardTripsById = new Map();
 
 const defaultFriends = ["Maya", "Leo", "Nora"];
 let invitedFriends = [...defaultFriends];
@@ -75,6 +85,29 @@ const friendTrips = [
     visibility: "shareable",
     status: "Live now",
     highlight: "Tea houses, temple walks, and a cherry blossom food crawl.",
+    aiDetails: {
+      summary:
+        "Pravas AI grouped Maya's live check-ins, photos, and notes into a Kyoto spring travel journal.",
+      hotels: [
+        "Hotel Kanra Kyoto · checked in Apr 8 · near Kyoto Station",
+        "Yuzuya Ryokan · checked in Apr 12 · Gion ryokan night",
+      ],
+      restaurants: [
+        "Nishiki Market lunch crawl · tofu doughnuts, tamagoyaki, and pickles",
+        "Gion Kappa · late dinner after lantern walks",
+        "% Arabica Higashiyama · morning coffee stop before temples",
+      ],
+      sights: [
+        "Philosopher's Path · cherry blossom walk tagged as trip highlight",
+        "Kiyomizu-dera · sunset viewpoint and group photo",
+        "Fushimi Inari · early torii gate hike before breakfast",
+      ],
+      moments: [
+        "AI matched receipt times with map pins to build a food crawl recap.",
+        "Temple photos were clustered into an automatically titled 'golden hour shrines' album.",
+        "Shared notes from the group chat became a day-by-day Kyoto recommendations list.",
+      ],
+    },
   },
   {
     name: "Leo's Patagonia trek",
@@ -85,6 +118,30 @@ const friendTrips = [
     visibility: "private",
     status: "Planning",
     highlight: "Shared prep list for refugios, viewpoints, and rest days.",
+    aiDetails: {
+      summary:
+        "Pravas AI is ready to turn Leo's check-ins, trail logs, and shared prep notes into a trek dossier.",
+      hotels: [
+        "Hotel Las Torres Patagonia · planned arrival base",
+        "Refugio Grey · reserved glacier-side overnight",
+        "EcoCamp Patagonia · planned recovery night after the loop",
+      ],
+      restaurants: [
+        "Base camp boxed lunches · trail meal plan",
+        "Cervecería Baguales · Puerto Natales celebration dinner",
+        "The Singular Restaurant · post-trek seafood reservation",
+      ],
+      sights: [
+        "Mirador Base Torres · sunrise objective",
+        "Grey Glacier lookout · boat and hike day",
+        "French Valley · weather-dependent viewpoint",
+      ],
+      moments: [
+        "AI will summarize GPS breadcrumbs into daily mileage and elevation notes.",
+        "Packing messages are being organized into a shared gear checklist.",
+        "Weather alerts and rest-day notes will be attached to the live itinerary.",
+      ],
+    },
   },
   {
     name: "Nora's New Orleans eats",
@@ -95,6 +152,29 @@ const friendTrips = [
     visibility: "shareable",
     status: "Shared",
     highlight: "A long weekend dashboard for jazz clubs and dinner plans.",
+    aiDetails: {
+      summary:
+        "Pravas AI turned Nora's saved places into an eats-first New Orleans weekend guide.",
+      hotels: [
+        "Hotel Peter & Paul · Marigny check-in",
+        "The Chloe · Uptown pool afternoon saved as a stop",
+      ],
+      restaurants: [
+        "Café du Monde · beignets after the riverfront walk",
+        "Turkey and the Wolf · lunch pin from Leo",
+        "Compère Lapin · dinner reservation and shared notes",
+      ],
+      sights: [
+        "Frenchmen Street · jazz-club route",
+        "Garden District · self-guided architecture walk",
+        "City Park · sculpture garden and coffee detour",
+      ],
+      moments: [
+        "AI grouped every restaurant receipt into a 'best bites' list.",
+        "Late-night music venues were pulled from calendar holds and chat mentions.",
+        "Photo locations became a shareable map of the weekend's favorite corners.",
+      ],
+    },
   },
 ];
 
@@ -155,20 +235,102 @@ const escapeHtml = (value) =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-const getVisibility = () => {
-  const selected = document.querySelector('input[name="visibility"]:checked');
-  return selected?.value || "private";
-};
-
-const getShareUrl = (tripName) => {
-  const slug = (tripName || "untitled-trip")
+const getSlug = (value, fallback = "untitled-trip") => {
+  const slug = (value || fallback)
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 
-  return `https://pravas.app/t/${slug || "untitled-trip"}`;
+  return slug || fallback;
 };
+
+const getTripId = (trip, prefix) => `${prefix}-${getSlug(trip.name)}`;
+
+const getDefaultAiDetails = (trip) => ({
+  summary: `Pravas AI is collecting ${trip.name}'s check-ins, receipts, map pins, and shared notes into one live trip story.`,
+  hotels: [
+    "Arrival hotel · AI will add the check-in time and confirmation details",
+    "Second stay · saved automatically when the crew checks in",
+  ],
+  restaurants: [
+    "First dinner · receipts and photos will become a meal recap",
+    "Cafe stop · mapped from location history and traveler notes",
+    "Celebration meal · ready for menus, favorites, and group ratings",
+  ],
+  sights: [
+    "Opening viewpoint · photos will be clustered into a highlight card",
+    "Neighborhood walk · map pins and captions will become a route",
+    "Final-day landmark · AI will keep tips for the next traveler",
+  ],
+  moments: [
+    "As the trip happens, AI turns check-ins into a chronological travel log.",
+    "Restaurants, hotels, and sightseeing stops are grouped by category automatically.",
+    "Friends' notes become searchable recommendations inside this dashboard.",
+  ],
+});
+
+const getAiDetails = (trip) => trip.aiDetails || getDefaultAiDetails(trip);
+
+const renderListItems = (list, items) => {
+  if (!list) {
+    return;
+  }
+
+  list.innerHTML = items
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+};
+
+const openTripAiDetails = (tripId) => {
+  const trip = dashboardTripsById.get(tripId);
+
+  if (!trip || !tripAiDetails) {
+    return;
+  }
+
+  const details = getAiDetails(trip);
+  const tripLength = getTripLength(trip.startsAt, trip.endsAt);
+
+  tripAiTitle.textContent = trip.name;
+  tripAiSummary.textContent = details.summary;
+  tripAiSignals.innerHTML = [
+    getTripDateRange(trip),
+    pluralize(tripLength, "day"),
+    pluralize(details.hotels.length, "hotel"),
+    pluralize(details.restaurants.length, "restaurant"),
+    pluralize(details.sights.length, "sight"),
+  ]
+    .map((signal) => `<span>${escapeHtml(signal)}</span>`)
+    .join("");
+
+  renderListItems(tripAiHotels, details.hotels);
+  renderListItems(tripAiRestaurants, details.restaurants);
+  renderListItems(tripAiSights, details.sights);
+
+  if (tripAiMoments) {
+    tripAiMoments.innerHTML = details.moments
+      .map((moment) => `<li>${escapeHtml(moment)}</li>`)
+      .join("");
+  }
+
+  tripAiDetails.hidden = false;
+  tripAiDetails.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
+const closeTripAiDetails = () => {
+  if (tripAiDetails) {
+    tripAiDetails.hidden = true;
+  }
+};
+
+const getVisibility = () => {
+  const selected = document.querySelector('input[name="visibility"]:checked');
+  return selected?.value || "private";
+};
+
+const getShareUrl = (tripName) =>
+  `https://pravas.app/t/${getSlug(tripName)}`;
 
 const setStatus = (message, type = "info") => {
   if (!tripBuilderStatus) {
@@ -317,6 +479,10 @@ const createDashboardTripCard = (trip, options = {}) => {
     options.isOwner ? " is-owner-trip" : ""
   }`;
 
+  if (options.tripId) {
+    card.dataset.tripId = options.tripId;
+  }
+
   const visibilityLabel =
     trip.visibility === "shareable" ? "Shareable" : "Private";
   const peopleLabel = trip.friends?.length
@@ -357,6 +523,9 @@ const createDashboardTripCard = (trip, options = {}) => {
       <span>Travel crew</span>
       <strong>${escapeHtml(peopleLabel)}</strong>
     </div>
+    <button class="dashboard-trip-open" type="button" data-trip-detail-trigger>
+      View AI trip details
+    </button>
   `;
 
   if (options.isOwner && trip.shareUrl) {
@@ -376,12 +545,15 @@ const renderDashboardPage = () => {
   }
 
   const tripDraft = getStoredTripDraft();
+  dashboardTripsById.clear();
 
   if (yourTripsGrid) {
     if (tripDraft) {
+      const tripId = getTripId(tripDraft, "your");
+      dashboardTripsById.set(tripId, tripDraft);
       emptyYourTrips?.remove();
       yourTripsGrid.prepend(
-        createDashboardTripCard(tripDraft, { isOwner: true }),
+        createDashboardTripCard(tripDraft, { isOwner: true, tripId }),
       );
     }
 
@@ -393,7 +565,9 @@ const renderDashboardPage = () => {
   if (friendTripsGrid) {
     friendTripsGrid.innerHTML = "";
     friendTrips.forEach((trip) => {
-      friendTripsGrid.append(createDashboardTripCard(trip));
+      const tripId = getTripId(trip, "friend");
+      dashboardTripsById.set(tripId, trip);
+      friendTripsGrid.append(createDashboardTripCard(trip, { tripId }));
     });
   }
 
@@ -447,6 +621,20 @@ const renderHomeDashboard = () => {
     dashboardShare.textContent = "";
   }
 };
+
+[yourTripsGrid, friendTripsGrid].forEach((grid) => {
+  grid?.addEventListener("click", (event) => {
+    const card = event.target.closest(".dashboard-trip-card");
+
+    if (!card || event.target.closest("a")) {
+      return;
+    }
+
+    openTripAiDetails(card.dataset.tripId);
+  });
+});
+
+tripAiClose?.addEventListener("click", closeTripAiDetails);
 
 renderHomeDashboard();
 renderDashboardPage();
