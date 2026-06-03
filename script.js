@@ -56,9 +56,47 @@ const dashboardDateLabel = document.querySelector("[data-dashboard-date-label]")
 const dashboardDateDetail = document.querySelector("[data-dashboard-date-detail]");
 const dashboardCrew = document.querySelector("[data-dashboard-crew]");
 const dashboardShare = document.querySelector("[data-dashboard-share]");
+const yourTripsGrid = document.querySelector("[data-your-trips]");
+const emptyYourTrips = document.querySelector("[data-empty-your-trips]");
+const yourTripCount = document.querySelector("[data-your-trip-count]");
+const friendTripsGrid = document.querySelector("[data-friend-trips]");
+const friendTripCount = document.querySelector("[data-friend-trip-count]");
 
 const defaultFriends = ["Maya", "Leo", "Nora"];
 let invitedFriends = [...defaultFriends];
+
+const friendTrips = [
+  {
+    name: "Maya's Kyoto spring",
+    owner: "Maya Chen",
+    startsAt: "2026-04-08",
+    endsAt: "2026-04-15",
+    friends: ["Ari", "Sam", "Priya"],
+    visibility: "shareable",
+    status: "Live now",
+    highlight: "Tea houses, temple walks, and a cherry blossom food crawl.",
+  },
+  {
+    name: "Leo's Patagonia trek",
+    owner: "Leo Martinez",
+    startsAt: "2026-11-03",
+    endsAt: "2026-11-12",
+    friends: ["Nora", "Ben"],
+    visibility: "private",
+    status: "Planning",
+    highlight: "Shared prep list for refugios, viewpoints, and rest days.",
+  },
+  {
+    name: "Nora's New Orleans eats",
+    owner: "Nora Patel",
+    startsAt: "2026-07-18",
+    endsAt: "2026-07-21",
+    friends: ["Maya", "Leo", "You"],
+    visibility: "shareable",
+    status: "Shared",
+    highlight: "A long weekend dashboard for jazz clubs and dinner plans.",
+  },
+];
 
 const formatDate = (dateValue) => {
   if (!dateValue) {
@@ -105,6 +143,17 @@ const getStoredTripDraft = () => {
 
 const pluralize = (count, singular, plural = `${singular}s`) =>
   `${count} ${count === 1 ? singular : plural}`;
+
+const getTripDateRange = (trip) =>
+  `${formatDate(trip.startsAt)} → ${formatDate(trip.endsAt)}`;
+
+const escapeHtml = (value) =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 
 const getVisibility = () => {
   const selected = document.querySelector('input[name="visibility"]:checked');
@@ -260,6 +309,99 @@ const updateDraftPreview = (draft) => {
   draftPreview.hidden = false;
 };
 
+const createDashboardTripCard = (trip, options = {}) => {
+  const tripLength = getTripLength(trip.startsAt, trip.endsAt);
+  const friendCount = trip.friends?.length || 0;
+  const card = document.createElement("article");
+  card.className = `dashboard-trip-card${
+    options.isOwner ? " is-owner-trip" : ""
+  }`;
+
+  const visibilityLabel =
+    trip.visibility === "shareable" ? "Shareable" : "Private";
+  const peopleLabel = trip.friends?.length
+    ? trip.friends.join(", ")
+    : "No friends invited yet";
+  const ownerLabel = options.isOwner
+    ? "Created by you"
+    : `Shared by ${trip.owner}`;
+  const statusLabel = options.isOwner
+    ? trip.visibility === "shareable"
+      ? "Shared"
+      : "Private"
+    : trip.status;
+
+  const safeTripName = escapeHtml(trip.name);
+
+  card.innerHTML = `
+    <div class="dashboard-trip-card-header">
+      <div>
+        <span>${escapeHtml(ownerLabel)}</span>
+        <h3>${safeTripName}</h3>
+      </div>
+      <strong>${escapeHtml(statusLabel)}</strong>
+    </div>
+    <p>${escapeHtml(
+      trip.highlight || "Your itinerary, invite list, and trip dates are ready.",
+    )}</p>
+    <div class="dashboard-trip-meta" aria-label="${safeTripName} trip details">
+      <span>${escapeHtml(pluralize(tripLength, "day"))}</span>
+      <span>${escapeHtml(pluralize(friendCount, "friend"))}</span>
+      <span>${escapeHtml(visibilityLabel)}</span>
+    </div>
+    <div class="dashboard-trip-detail">
+      <span>Dates</span>
+      <strong>${escapeHtml(getTripDateRange(trip))}</strong>
+    </div>
+    <div class="dashboard-trip-detail">
+      <span>Travel crew</span>
+      <strong>${escapeHtml(peopleLabel)}</strong>
+    </div>
+  `;
+
+  if (options.isOwner && trip.shareUrl) {
+    const link = document.createElement("a");
+    link.className = "dashboard-share-link";
+    link.href = trip.shareUrl;
+    link.textContent = `Share dashboard: ${trip.shareUrl}`;
+    card.append(link);
+  }
+
+  return card;
+};
+
+const renderDashboardPage = () => {
+  if (!yourTripsGrid && !friendTripsGrid) {
+    return;
+  }
+
+  const tripDraft = getStoredTripDraft();
+
+  if (yourTripsGrid) {
+    if (tripDraft) {
+      emptyYourTrips?.remove();
+      yourTripsGrid.prepend(
+        createDashboardTripCard(tripDraft, { isOwner: true }),
+      );
+    }
+
+    if (yourTripCount) {
+      yourTripCount.textContent = pluralize(tripDraft ? 1 : 0, "trip");
+    }
+  }
+
+  if (friendTripsGrid) {
+    friendTripsGrid.innerHTML = "";
+    friendTrips.forEach((trip) => {
+      friendTripsGrid.append(createDashboardTripCard(trip));
+    });
+  }
+
+  if (friendTripCount) {
+    friendTripCount.textContent = pluralize(friendTrips.length, "trip");
+  }
+};
+
 const renderHomeDashboard = () => {
   if (!dashboardCard) {
     return;
@@ -307,6 +449,7 @@ const renderHomeDashboard = () => {
 };
 
 renderHomeDashboard();
+renderDashboardPage();
 
 if (tripBuilderForm) {
   renderFriends();
@@ -360,11 +503,11 @@ if (tripBuilderForm) {
       JSON.stringify(tripDraft),
     );
     updateDraftPreview(tripDraft);
-    setStatus("Trip created. Opening your home dashboard…", "success");
+    setStatus("Trip created. Opening your dashboard…", "success");
 
     tripSubmit.textContent = "Opening dashboard";
     window.setTimeout(() => {
-      window.location.href = "index.html#dashboard";
+      window.location.href = "dashboard.html";
     }, 650);
   });
 }

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="View your Pravas trip dashboard with the trips you create and trips your friends share with you."
+    />
+    <title>Dashboard | Pravas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand" href="index.html#hero" aria-label="Pravas home">
+          <span class="brand-mark">P</span>
+          <span>Pravas</span>
+        </a>
+        <nav class="nav-links" aria-label="Main menu">
+          <a href="index.html#how-it-works">How it works</a>
+          <a href="start-trip.html">Start a trip</a>
+          <a href="dashboard.html" aria-current="page">Dashboard</a>
+          <a href="index.html#features">Features</a>
+        </nav>
+        <a class="nav-cta" href="start-trip.html">Create trip</a>
+      </header>
+
+      <main>
+        <section class="dashboard-page-hero" aria-labelledby="dashboard-title">
+          <div>
+            <p class="eyebrow">Trip dashboard</p>
+            <h1 id="dashboard-title">Your travel home base.</h1>
+            <p class="hero-text">
+              See the trip you created, follow the trips friends have shared with
+              you, and jump back into every live itinerary from one place.
+            </p>
+          </div>
+          <a class="button button-primary" href="start-trip.html"
+            >Create another trip</a
+          >
+        </section>
+
+        <section class="dashboard-overview" aria-labelledby="your-trips-title">
+          <div class="dashboard-section-heading">
+            <div>
+              <p class="eyebrow">Created by you</p>
+              <h2 id="your-trips-title">Your trips</h2>
+            </div>
+            <span class="dashboard-count" data-your-trip-count>0 trips</span>
+          </div>
+
+          <div class="dashboard-trip-grid" data-your-trips>
+            <article class="empty-dashboard-card" data-empty-your-trips>
+              <h3>No created trips yet</h3>
+              <p>
+                Start a trip and it will appear here automatically with its
+                dates, invite list, and sharing status.
+              </p>
+              <a class="button button-secondary" href="start-trip.html"
+                >Start a trip</a
+              >
+            </article>
+          </div>
+        </section>
+
+        <section class="dashboard-overview" aria-labelledby="friends-trips-title">
+          <div class="dashboard-section-heading">
+            <div>
+              <p class="eyebrow">Shared with you</p>
+              <h2 id="friends-trips-title">Friends' trips</h2>
+            </div>
+            <span class="dashboard-count" data-friend-trip-count>3 trips</span>
+          </div>
+
+          <div class="dashboard-trip-grid" data-friend-trips></div>
+        </section>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
