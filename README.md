@@ -12,6 +12,23 @@ python3 -m http.server 4173
 
 Then open `http://localhost:4173`.
 
+## Native iOS app
+
+The repository now includes a native SwiftUI app scaffold in `ios/` that mirrors the website product proof and adds reusable backend logic for mobile:
+
+- `ios/App/PravasApp` — Start Trip, Timeline, and Signals tabs for the iOS frontend.
+- `ios/Sources/PravasCore` — local timeline inference, remote API client, trip draft models, and persistence helpers.
+- `ios/Tests/PravasCoreTests` — Swift tests for the on-device timeline backend.
+
+Run the iOS backend tests with:
+
+```bash
+cd ios
+swift test
+```
+
+See `ios/README.md` for Xcode setup notes.
+
 
 ## AI capture backend
 
