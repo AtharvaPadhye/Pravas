@@ -53,7 +53,7 @@ struct StartTripView: View {
                         }
 
                         Button {
-                            model.createTrip()
+                            Task { await model.createTrip() }
                         } label: {
                             Label("Create trip", systemImage: "plus.circle.fill")
                                 .frame(maxWidth: .infinity)
