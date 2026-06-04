@@ -690,9 +690,9 @@ if (tripBuilderForm) {
       JSON.stringify(tripDraft),
     );
     updateDraftPreview(tripDraft);
-    setStatus("Trip created. Opening Step 02 so you can add moments…", "success");
+    setStatus("Trip created. Opening the capture inbox…", "success");
 
-    tripSubmit.textContent = "Opening Step 02";
+    tripSubmit.textContent = "Opening capture";
     window.setTimeout(() => {
       window.location.href = "move-naturally.html";
     }, 650);
@@ -1002,7 +1002,7 @@ const renderRecapPage = () => {
       ? bestMoments
           .map((moment) => `<li>${escapeHtml(moment.title)} · ${escapeHtml(moment.place)}</li>`)
           .join("")
-      : `<li>Add a restaurant, sight, or activity in Step 02 to create recommendations.</li>`;
+      : `<li>Add a restaurant, sight, or activity in the capture inbox to create recommendations.</li>`;
   }
 
   if (recapFollowup) {
@@ -1019,7 +1019,7 @@ const renderRecapPage = () => {
               `<li>${escapeHtml(formatMomentDay(moment.dateTime))}: ${escapeHtml(moment.title)}</li>`,
           )
           .join("")
-      : `<li>Add moments in Step 02 and the recap timeline will build itself.</li>`;
+      : `<li>Add moments in the capture inbox and the recap timeline will build itself.</li>`;
   }
 };
 
