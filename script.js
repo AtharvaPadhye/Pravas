@@ -77,35 +77,34 @@ let invitedFriends = [...defaultFriends];
 
 const friendTrips = [
   {
-    name: "Maya's Kyoto spring",
-    owner: "Maya Chen",
-    startsAt: "2026-04-08",
-    endsAt: "2026-04-15",
-    friends: ["Ari", "Sam", "Priya"],
+    name: "Lisbon product proof",
+    owner: "Pravas AI Backend",
+    startsAt: "2026-05-02",
+    endsAt: "2026-05-02",
+    friends: ["Apple Photos", "Google Maps", "Gmail", "Credit Card"],
     visibility: "shareable",
-    status: "Live now",
-    highlight: "Tea houses, temple walks, and a cherry blossom food crawl.",
+    status: "Auto-captured",
+    highlight: "No manual logging: passive signals prove a hotel stay, restaurant visit, and Day 1 timeline.",
     aiDetails: {
       summary:
-        "Pravas AI grouped Maya's live check-ins, photos, and notes into a Kyoto spring travel journal.",
+        "Pravas AI fused Apple Photos, Google Maps, Gmail reservations, and a card charge into a Lisbon Day 1 timeline without a traveler typing a journal entry.",
       hotels: [
-        "Hotel Kanra Kyoto · checked in Apr 8 · near Kyoto Station",
-        "Yuzuya Ryokan · checked in Apr 12 · Gion ryokan night",
+        "Apple Photos detected: Alfama · geo-tagged media cluster at 9:08 AM",
+        "Gmail found: Memmo Alfama booking · confirmation MAL-4921",
+        "Google Maps dwell: overnight stay started at Memmo Alfama",
       ],
       restaurants: [
-        "Nishiki Market lunch crawl · tofu doughnuts, tamagoyaki, and pickles",
-        "Gion Kappa · late dinner after lantern walks",
-        "% Arabica Higashiyama · morning coffee stop before temples",
+        "Maps visited: Time Out Market · 68 minute dwell in Cais do Sodré",
+        "Card charge: €42.10 restaurant · matched to Time Out Market",
       ],
       sights: [
-        "Philosopher's Path · cherry blossom walk tagged as trip highlight",
-        "Kiyomizu-dera · sunset viewpoint and group photo",
-        "Fushimi Inari · early torii gate hike before breakfast",
+        "Alfama neighborhood · inferred from photo location and hotel reservation",
+        "Cais do Sodré · inferred from maps visit and restaurant charge",
       ],
       moments: [
-        "AI matched receipt times with map pins to build a food crawl recap.",
-        "Temple photos were clustered into an automatically titled 'golden hour shrines' album.",
-        "Shared notes from the group chat became a day-by-day Kyoto recommendations list.",
+        "AI generated: Day 1 timeline from five passive travel signals.",
+        "Stayed at Memmo Alfama because reservation and overnight movement data agree.",
+        "Ate at Time Out Market because map dwell and card charge matched the same place.",
       ],
     },
   },
@@ -248,15 +247,15 @@ const getSlug = (value, fallback = "untitled-trip") => {
 const getTripId = (trip, prefix) => `${prefix}-${getSlug(trip.name)}`;
 
 const getDefaultAiDetails = (trip) => ({
-  summary: `Pravas AI is collecting ${trip.name}'s check-ins, receipts, map pins, and shared notes into one live trip story.`,
+  summary: `Pravas AI is collecting ${trip.name}'s app signals, movement data, reservations, card charges, and optional notes into one live trip story.`,
   hotels: [
-    "Arrival hotel · AI will add the check-in time and confirmation details",
-    "Second stay · saved automatically when the crew checks in",
+    "Arrival hotel · inferred when reservation data matches overnight movement dwell",
+    "Second stay · saved automatically when maps, photos, or booking data agree",
   ],
   restaurants: [
-    "First dinner · receipts and photos will become a meal recap",
-    "Cafe stop · mapped from location history and traveler notes",
-    "Celebration meal · ready for menus, favorites, and group ratings",
+    "First dinner · card merchant and map dwell become a meal recap",
+    "Cafe stop · mapped from location history and photo timestamps",
+    "Celebration meal · reservation, spend, and favorites grouped automatically",
   ],
   sights: [
     "Opening viewpoint · photos will be clustered into a highlight card",
@@ -264,9 +263,9 @@ const getDefaultAiDetails = (trip) => ({
     "Final-day landmark · AI will keep tips for the next traveler",
   ],
   moments: [
-    "As the trip happens, AI turns check-ins into a chronological travel log.",
+    "As the trip happens, AI turns passive signals into a chronological travel log.",
     "Restaurants, hotels, and sightseeing stops are grouped by category automatically.",
-    "Friends' notes become searchable recommendations inside this dashboard.",
+    "Manual notes remain optional review context instead of required logging.",
   ],
 });
 

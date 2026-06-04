@@ -1,0 +1,11 @@
+{
+  "name": "pravas",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Automatic vacation timeline capture for Pravas.",
+  "main": "backend.js",
+  "scripts": {
+    "start": "node backend.js",
+    "test": "node --test"
+  }
+}
