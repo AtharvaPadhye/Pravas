@@ -45,9 +45,14 @@ The API listens on `http://localhost:4174` by default.
 ### API surface
 
 - `GET /health` — service status.
-- `GET /api/integrations` — the supported passive data sources: Apple Photos, Google Maps, Gmail/Reservations, and Credit Card.
+- `GET /api/integrations` — the supported passive data sources and connector metadata, including Google-backed Maps, Photos, Gmail, Flights, and Calendar scopes.
 - `GET /api/demo/timeline` — Lisbon product-proof demo that produces: Apple Photos detected Alfama, Gmail found the Memmo Alfama booking, Maps visited Time Out Market, Card charge €42.10 restaurant, and an AI-generated Day 1 timeline.
 - `POST /api/signals` — submit an array of consented app, movement, reservation, and card signals and receive inferred timeline events with confidence, category, evidence, and reasoning.
+- `POST /api/auth/google` — exchange a Google Identity Services ID token for a Pravas user, bearer session, and connector status. The backend verifies the token with Google tokeninfo and, when `GOOGLE_CLIENT_ID` is set, enforces the expected OAuth audience.
+- `GET /api/me` — return the signed-in user and connector state for a bearer session.
+- `GET /api/connectors` — list all connectors; include `Authorization: Bearer <token>` to mark which ones are connected for the user.
+- `POST /api/connectors/:id` — connect a consented connector for the signed-in user. Google-backed connectors require `google_account` first.
+- `DELETE /api/connectors/:id` — disconnect a connector. Disconnecting `google_account` also removes dependent Google connectors.
 
 ### Test
 
