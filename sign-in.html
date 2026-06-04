@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Sign in to Pravas, create your travel profile, and connect Google, photos, email, flight, and calendar accounts for automatic trip capture."
+    />
+    <title>Sign in and profile | Pravas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand" href="index.html#hero" aria-label="Pravas home">
+          <span class="brand-mark">P</span>
+          <span>Pravas</span>
+        </a>
+        <nav class="nav-links" aria-label="Main menu">
+          <a href="index.html#workspace">Workspace</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="start-trip.html">Start a trip</a>
+          <a href="move-naturally.html">Capture</a>
+          <a href="sign-in.html" aria-current="page">Sign in</a>
+        </nav>
+        <a class="nav-cta" href="dashboard.html">User home</a>
+      </header>
+
+      <main>
+        <section class="auth-hero" aria-labelledby="auth-title">
+          <div class="auth-copy">
+            <p class="eyebrow">Account setup</p>
+            <h1 id="auth-title">Sign in, build your profile, and connect your travel signals.</h1>
+            <p class="hero-text">
+              Pravas uses consented accounts like Google, photos, emails, calendars,
+              and flight inboxes to assemble your dashboard automatically while you
+              keep control of every connection.
+            </p>
+            <div class="auth-trust-row" aria-label="Privacy highlights">
+              <span>Consent first</span>
+              <span>Profile-owned data</span>
+              <span>Disconnect anytime</span>
+            </div>
+          </div>
+
+          <aside class="auth-card" aria-label="Sign in options">
+            <div class="auth-card-header">
+              <span class="auth-avatar" data-profile-initials>P</span>
+              <div>
+                <p class="eyebrow">Pravas ID</p>
+                <h2 data-profile-card-name>Create your profile</h2>
+              </div>
+            </div>
+            <button class="oauth-button" type="button" data-google-signin>
+              <span aria-hidden="true">G</span>
+              Continue with Google
+            </button>
+            <p class="auth-note">
+              Prototype sign-in stores a local profile for this browser. Production
+              OAuth can plug into the same profile and connection states.
+            </p>
+            <div class="auth-status form-status" data-auth-status role="status"></div>
+          </aside>
+        </section>
+
+        <section class="profile-setup-grid" aria-labelledby="profile-title">
+          <form id="profile-form" class="profile-form-card" aria-label="Create profile form">
+            <div class="builder-header">
+              <div>
+                <p class="eyebrow">Traveler profile</p>
+                <h2 id="profile-title">Tell Pravas where to start.</h2>
+              </div>
+              <span class="draft-pill" data-profile-state>Not saved</span>
+            </div>
+
+            <label class="field-group">
+              <span>Full name</span>
+              <input id="profile-name" name="name" type="text" autocomplete="name" placeholder="Maya Chen" required />
+            </label>
+            <label class="field-group">
+              <span>Email</span>
+              <input id="profile-email" name="email" type="email" autocomplete="email" placeholder="maya@example.com" required />
+            </label>
+            <div class="field-row builder-header">
+              <label class="field-group">
+                <span>Home airport</span>
+                <input id="profile-airport" name="airport" type="text" maxlength="3" placeholder="SFO" />
+              </label>
+              <label class="field-group">
+                <span>Travel style</span>
+                <input id="profile-style" name="travelStyle" type="text" placeholder="Food, boutique hotels, long walks" />
+              </label>
+            </div>
+            <button class="button button-primary profile-submit" type="submit">Save profile</button>
+            <p id="profile-status" class="form-status" role="status"></p>
+          </form>
+
+          <aside class="connection-panel" aria-labelledby="connection-title">
+            <div class="dashboard-section-heading compact-heading">
+              <div>
+                <p class="eyebrow">Connected accounts</p>
+                <h2 id="connection-title">Choose the signals Pravas can use.</h2>
+              </div>
+              <span class="dashboard-count" data-connected-count>0 connected</span>
+            </div>
+            <div class="connection-grid" data-connection-grid></div>
+          </aside>
+        </section>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

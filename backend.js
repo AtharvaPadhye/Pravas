@@ -11,22 +11,52 @@ const integrations = [
     permission: "read-only album/location metadata",
   },
   {
+    id: "google_account",
+    label: "Google Account",
+    signal: "identity, maps, photos, Gmail, Flights, and Calendar permissions",
+    permission: "OAuth scopes selected by the traveler",
+  },
+  {
     id: "google_maps",
     label: "Google Maps",
     signal: "visited places and dwell time",
     permission: "location history export or app webhook",
   },
   {
+    id: "google_photos",
+    label: "Google Photos",
+    signal: "photo timestamps, albums, and location clusters",
+    permission: "read-only media metadata and selected albums",
+  },
+  {
     id: "gmail_reservations",
     label: "Gmail / Reservations",
-    signal: "hotel and restaurant confirmations",
+    signal: "hotel, restaurant, and tour confirmations",
     permission: "reservation emails only",
+  },
+  {
+    id: "google_flights",
+    label: "Google Flights",
+    signal: "flight bookings, holds, and tracked routes",
+    permission: "flight itinerary metadata",
+  },
+  {
+    id: "calendar",
+    label: "Calendar",
+    signal: "trip dates, event holds, and reminders",
+    permission: "travel-related calendar events",
   },
   {
     id: "credit_card",
     label: "Credit Card",
     signal: "merchant, timestamp, and amount",
     permission: "travel merchant transactions",
+  },
+  {
+    id: "airline_accounts",
+    label: "Airline accounts",
+    signal: "PNRs, loyalty profile, gates, and flight status",
+    permission: "itinerary and flight-status access",
   },
 ];
 
