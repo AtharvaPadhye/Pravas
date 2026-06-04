@@ -39,22 +39,22 @@
             <p class="eyebrow">Step 02 · Move naturally</p>
             <h1 id="move-title">Drop moments in as you go. Pravas sorts the story.</h1>
             <p class="hero-text">
-              Capture the lightweight signals travelers already have—hotel
-              check-ins, dinner receipts, saved places, quick notes—and turn
-              them into a calm daily timeline without forcing anyone to journal
-              in the moment.
+              Let the backend ingest signals travelers already create—Apple
+              Photos locations, Google Maps movement, Gmail reservations, and
+              credit card merchants—then use this screen only to review or
+              backfill anything AI could not prove.
             </p>
             <div class="start-stats" aria-label="Move naturally highlights">
-              <div><strong>4 signals</strong><span>hotels, meals, sights, activities</span></div>
-              <div><strong>Auto-sorted</strong><span>by day and time</span></div>
-              <div><strong>Group-ready</strong><span>everyone adds context</span></div>
+              <div><strong>4 integrations</strong><span>photos, maps, reservations, cards</span></div>
+              <div><strong>AI-inferred</strong><span>stay, meal, sight, activity</span></div>
+              <div><strong>Review-ready</strong><span>manual only when needed</span></div>
             </div>
           </div>
 
           <form id="moment-capture-form" class="trip-builder-card moment-capture-card" aria-label="Add a trip moment">
             <div class="builder-header">
               <div>
-                <p>Live trip inbox</p>
+                <p>AI capture inbox</p>
                 <h2 data-moment-trip-title>Plan a trip first</h2>
               </div>
               <span class="draft-pill" data-moment-count>0 moments</span>
@@ -70,7 +70,7 @@
             </div>
 
             <label class="field-group" for="moment-type">
-              <span>Signal type</span>
+              <span>Detected signal type</span>
               <select id="moment-type" name="moment-type">
                 <option value="hotel">Hotel check-in</option>
                 <option value="restaurant">Restaurant or cafe</option>
@@ -108,7 +108,7 @@
             </div>
 
             <p id="moment-capture-status" class="form-status" aria-live="polite"></p>
-            <button class="button button-primary trip-submit" type="submit">Add to timeline</button>
+            <button class="button button-primary trip-submit" type="submit">Approve or backfill timeline</button>
           </form>
         </section>
 
@@ -123,9 +123,9 @@
               <span class="launch-icon">⌁</span>
               <h3>Why this workflow feels natural</h3>
               <p>
-                Travelers only add the smallest useful signal. Pravas handles
-                categorizing, ordering, and preserving the context so the group
-                can stay present on the trip.
+                The comprehensive backend does the heavy lift: it groups
+                consented app events by place and time, scores confidence, and
+                asks for manual input only when evidence is missing or ambiguous.
               </p>
               <a class="button button-secondary" href="relive-together.html">Continue to Step 03</a>
             </aside>
