@@ -53,10 +53,51 @@ public struct TravelSignal: Codable, Equatable, Identifiable, Sendable {
     }
 }
 
-public enum TimelineCategory: String, Codable, Equatable, Sendable {
+public enum TimelineCategory: String, Codable, CaseIterable, Equatable, Sendable {
     case hotel
     case restaurant
     case activity
+
+    public var displayName: String {
+        switch self {
+        case .hotel: "Hotel"
+        case .restaurant: "Restaurant"
+        case .activity: "Activity"
+        }
+    }
+}
+
+public enum SignalReviewStatus: String, Codable, CaseIterable, Equatable, Sendable {
+    case pending
+    case approved
+    case rejected
+
+    public var displayName: String {
+        switch self {
+        case .pending: "Pending"
+        case .approved: "Approved"
+        case .rejected: "Rejected"
+        }
+    }
+}
+
+public struct SignalReviewItem: Codable, Equatable, Identifiable, Sendable {
+    public let id: UUID
+    public var signal: TravelSignal
+    public var status: SignalReviewStatus
+    public var note: String?
+
+    public init(
+        id: UUID = UUID(),
+        signal: TravelSignal,
+        status: SignalReviewStatus = .pending,
+        note: String? = nil
+    ) {
+        self.id = id
+        self.signal = signal
+        self.status = status
+        self.note = note
+    }
 }
 
 public struct TimelineEvent: Codable, Equatable, Identifiable, Sendable {
@@ -127,5 +168,41 @@ public enum TripVisibility: String, Codable, CaseIterable, Equatable, Sendable {
         case .privateTrip: "Private trip"
         case .shareable: "Shareable link"
         }
+    }
+}
+
+public struct TripDashboard: Codable, Equatable, Sendable {
+    public var draft: TripDraft
+    public var timeline: TimelineResponse
+    public var reviewedSignals: [SignalReviewItem]
+    public var shareURL: URL?
+    public var lastUpdatedAt: Date
+
+    public init(
+        draft: TripDraft,
+        timeline: TimelineResponse,
+        reviewedSignals: [SignalReviewItem],
+        shareURL: URL? = nil,
+        lastUpdatedAt: Date = Date()
+    ) {
+        self.draft = draft
+        self.timeline = timeline
+        self.reviewedSignals = reviewedSignals
+        self.shareURL = shareURL
+        self.lastUpdatedAt = lastUpdatedAt
+    }
+}
+
+public struct PublishedRecap: Codable, Equatable, Sendable {
+    public let title: String
+    public let summary: String
+    public let shareURL: URL
+    public let highlights: [String]
+
+    public init(title: String, summary: String, shareURL: URL, highlights: [String]) {
+        self.title = title
+        self.summary = summary
+        self.shareURL = shareURL
+        self.highlights = highlights
     }
 }
