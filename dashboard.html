@@ -28,23 +28,76 @@
           <a href="start-trip.html">Start a trip</a>
           <a href="dashboard.html" aria-current="page">Dashboard</a>
           <a href="move-naturally.html">Capture</a>
+          <a href="sign-in.html">Sign in</a>
         </nav>
         <a class="nav-cta" href="start-trip.html">Create trip</a>
       </header>
 
       <main>
-        <section class="dashboard-page-hero" aria-labelledby="dashboard-title">
+        <section class="dashboard-page-hero user-home-hero" aria-labelledby="dashboard-title">
           <div>
-            <p class="eyebrow">Trip dashboard</p>
-            <h1 id="dashboard-title">Your travel home base.</h1>
-            <p class="hero-text">
-              See trips you created, review the trips friends shared with you, and
-              jump straight into the live itinerary, capture inbox, or recap.
+            <p class="eyebrow">User home</p>
+            <h1 id="dashboard-title" data-dashboard-user-name>Your travel home base.</h1>
+            <p class="hero-text" data-dashboard-user-email>
+              Sign in to create a traveler profile, connect your accounts, and
+              turn Google, photos, email, calendar, and flight signals into a live dashboard.
             </p>
           </div>
-          <a class="button button-primary" href="start-trip.html"
-            >Create another trip</a
-          >
+          <div class="user-home-actions">
+            <a class="button button-primary" href="sign-in.html">Create profile</a>
+            <a class="button button-secondary" href="start-trip.html">Create another trip</a>
+          </div>
+        </section>
+
+        <section class="user-home-grid" aria-labelledby="profile-home-title">
+          <article class="user-home-card profile-home-card">
+            <div class="dashboard-trip-card-header">
+              <div>
+                <span data-dashboard-profile-status>Profile needed</span>
+                <h2 id="profile-home-title">Traveler profile</h2>
+              </div>
+              <strong data-dashboard-connected-accounts>0 connected accounts</strong>
+            </div>
+            <div class="profile-facts">
+              <div>
+                <span>Home airport</span>
+                <strong data-dashboard-home-airport>Add home airport</strong>
+              </div>
+              <div>
+                <span>Travel style</span>
+                <strong data-dashboard-travel-style>Add travel style</strong>
+              </div>
+            </div>
+            <a class="dashboard-trip-open profile-link-button" href="sign-in.html">
+              Manage profile and connections
+            </a>
+          </article>
+
+          <article class="user-home-card">
+            <div class="dashboard-trip-card-header">
+              <div>
+                <span>Signal sources</span>
+                <h2>Connected accounts</h2>
+              </div>
+            </div>
+            <ul class="connection-summary-list" data-dashboard-connection-list>
+              <li>Connect Google, photos, email, flights, or calendar accounts from the sign-in page.</li>
+            </ul>
+          </article>
+
+          <article class="user-home-card">
+            <div class="dashboard-trip-card-header">
+              <div>
+                <span>Onboarding</span>
+                <h2>Home setup</h2>
+              </div>
+            </div>
+            <ul class="home-checklist" data-dashboard-checklist>
+              <li><span aria-hidden="true">○</span>Create profile</li>
+              <li><span aria-hidden="true">○</span>Connect Google / photos / email</li>
+              <li><span aria-hidden="true">○</span>Create your first trip</li>
+            </ul>
+          </article>
         </section>
 
         <section class="dashboard-overview" aria-labelledby="your-trips-title">

@@ -1,4 +1,56 @@
 const TRIP_DRAFT_STORAGE_KEY = "pravasTripDraft";
+const USER_PROFILE_STORAGE_KEY = "pravasUserProfile";
+
+const connectionCatalog = [
+  {
+    id: "google_account",
+    label: "Google Account",
+    signal: "identity, calendar, maps, and takeout permissions",
+    benefit: "Use one consent screen as the anchor for Google Photos, Gmail, Flights, and Maps.",
+  },
+  {
+    id: "google_photos",
+    label: "Google Photos",
+    signal: "photo timestamps, albums, and location clusters",
+    benefit: "Build visual trip days and discover sights from camera roll context.",
+  },
+  {
+    id: "gmail_reservations",
+    label: "Gmail",
+    signal: "reservation and confirmation emails",
+    benefit: "Find hotels, restaurants, tours, and tickets without manual forwarding.",
+  },
+  {
+    id: "google_flights",
+    label: "Google Flights",
+    signal: "flight holds, bookings, and price-watch routes",
+    benefit: "Create arrival and departure cards before the itinerary is finished.",
+  },
+  {
+    id: "calendar",
+    label: "Calendar",
+    signal: "trip dates, dinner holds, tours, and reminders",
+    benefit: "Turn planned events into reviewable trip moments automatically.",
+  },
+  {
+    id: "apple_photos",
+    label: "Apple Photos",
+    signal: "on-device albums and geo-tagged media",
+    benefit: "Merge iPhone photo memories with Google and email travel context.",
+  },
+  {
+    id: "outlook",
+    label: "Outlook / email",
+    signal: "work or alternate inbox travel confirmations",
+    benefit: "Capture flights and bookings sent outside your primary Gmail account.",
+  },
+  {
+    id: "airline_accounts",
+    label: "Airline accounts",
+    signal: "PNRs, loyalty profiles, gates, and flight status",
+    benefit: "Keep travel days current with delays, boarding windows, and terminals.",
+  },
+];
 
 const livePill = document.querySelector(".live-pill");
 
@@ -71,6 +123,228 @@ const tripAiSights = document.querySelector("[data-trip-ai-sights]");
 const tripAiMoments = document.querySelector("[data-trip-ai-moments]");
 const tripAiClose = document.querySelector("[data-trip-ai-close]");
 const dashboardTripsById = new Map();
+const dashboardUserName = document.querySelector("[data-dashboard-user-name]");
+const dashboardUserEmail = document.querySelector("[data-dashboard-user-email]");
+const dashboardProfileStatus = document.querySelector("[data-dashboard-profile-status]");
+const dashboardHomeAirport = document.querySelector("[data-dashboard-home-airport]");
+const dashboardTravelStyle = document.querySelector("[data-dashboard-travel-style]");
+const dashboardConnectedAccounts = document.querySelector("[data-dashboard-connected-accounts]");
+const dashboardConnectionList = document.querySelector("[data-dashboard-connection-list]");
+const dashboardChecklist = document.querySelector("[data-dashboard-checklist]");
+const profileForm = document.querySelector("#profile-form");
+const profileNameInput = document.querySelector("#profile-name");
+const profileEmailInput = document.querySelector("#profile-email");
+const profileAirportInput = document.querySelector("#profile-airport");
+const profileStyleInput = document.querySelector("#profile-style");
+const profileStatus = document.querySelector("#profile-status");
+const profileState = document.querySelector("[data-profile-state]");
+const authStatus = document.querySelector("[data-auth-status]");
+const googleSigninButton = document.querySelector("[data-google-signin]");
+const connectionGrid = document.querySelector("[data-connection-grid]");
+const connectedCount = document.querySelector("[data-connected-count]");
+const profileCardName = document.querySelector("[data-profile-card-name]");
+const profileInitials = document.querySelector("[data-profile-initials]");
+
+const getDefaultProfile = () => ({
+  name: "",
+  email: "",
+  airport: "",
+  travelStyle: "",
+  connectedAccounts: [],
+  signedInAt: "",
+  updatedAt: "",
+});
+
+const getStoredUserProfile = () => {
+  const storedProfile = window.localStorage.getItem(USER_PROFILE_STORAGE_KEY);
+
+  if (!storedProfile) {
+    return getDefaultProfile();
+  }
+
+  try {
+    return { ...getDefaultProfile(), ...JSON.parse(storedProfile) };
+  } catch {
+    window.localStorage.removeItem(USER_PROFILE_STORAGE_KEY);
+    return getDefaultProfile();
+  }
+};
+
+const saveUserProfile = (profile) => {
+  const nextProfile = {
+    ...getDefaultProfile(),
+    ...profile,
+    connectedAccounts: Array.isArray(profile.connectedAccounts)
+      ? profile.connectedAccounts
+      : [],
+    updatedAt: new Date().toISOString(),
+  };
+
+  window.localStorage.setItem(
+    USER_PROFILE_STORAGE_KEY,
+    JSON.stringify(nextProfile),
+  );
+
+  return nextProfile;
+};
+
+const getProfileInitials = (nameOrEmail) => {
+  const value = (nameOrEmail || "Pravas").trim();
+  const parts = value.includes("@")
+    ? [value.charAt(0)]
+    : value.split(/\s+/).slice(0, 2);
+
+  return parts.map((part) => part.charAt(0).toUpperCase()).join("") || "P";
+};
+
+const setProfileStatus = (message, type = "info") => {
+  if (!profileStatus) {
+    return;
+  }
+
+  profileStatus.textContent = message;
+  profileStatus.dataset.type = type;
+};
+
+const setAuthStatus = (message, type = "info") => {
+  if (!authStatus) {
+    return;
+  }
+
+  authStatus.textContent = message;
+  authStatus.dataset.type = type;
+};
+
+const getConnectedAccountLabels = (profile) =>
+  connectionCatalog
+    .filter((connection) => profile.connectedAccounts?.includes(connection.id))
+    .map((connection) => connection.label);
+
+const renderProfileSummary = () => {
+  const profile = getStoredUserProfile();
+  const connectedLabels = getConnectedAccountLabels(profile);
+  const hasProfile = Boolean(profile.name && profile.email);
+
+  if (profileNameInput && !profileNameInput.value) {
+    profileNameInput.value = profile.name;
+  }
+  if (profileEmailInput && !profileEmailInput.value) {
+    profileEmailInput.value = profile.email;
+  }
+  if (profileAirportInput && !profileAirportInput.value) {
+    profileAirportInput.value = profile.airport;
+  }
+  if (profileStyleInput && !profileStyleInput.value) {
+    profileStyleInput.value = profile.travelStyle;
+  }
+
+  if (profileState) {
+    profileState.textContent = hasProfile ? "Profile saved" : "Not saved";
+  }
+  if (profileCardName) {
+    profileCardName.textContent = hasProfile ? profile.name : "Create your profile";
+  }
+  if (profileInitials) {
+    profileInitials.textContent = getProfileInitials(profile.name || profile.email);
+  }
+
+  if (dashboardUserName) {
+    dashboardUserName.textContent = hasProfile
+      ? `Welcome home, ${profile.name.split(" ")[0]}`
+      : "Welcome to your Pravas home";
+  }
+  if (dashboardUserEmail) {
+    dashboardUserEmail.textContent = hasProfile
+      ? profile.email
+      : "Sign in to create a traveler profile and sync your accounts.";
+  }
+  if (dashboardProfileStatus) {
+    dashboardProfileStatus.textContent = hasProfile ? "Profile ready" : "Profile needed";
+  }
+  if (dashboardHomeAirport) {
+    dashboardHomeAirport.textContent = profile.airport || "Add home airport";
+  }
+  if (dashboardTravelStyle) {
+    dashboardTravelStyle.textContent = profile.travelStyle || "Add travel style";
+  }
+  if (dashboardConnectedAccounts) {
+    dashboardConnectedAccounts.textContent = pluralize(connectedLabels.length, "connected account");
+  }
+  if (dashboardConnectionList) {
+    dashboardConnectionList.innerHTML = connectedLabels.length
+      ? connectedLabels.map((label) => `<li>${escapeHtml(label)}</li>`).join("")
+      : `<li>Connect Google, photos, email, flights, or calendar accounts from the sign-in page.</li>`;
+  }
+  if (dashboardChecklist) {
+    const hasTrip = Boolean(getStoredTripDraft());
+    const items = [
+      { label: "Create profile", done: hasProfile },
+      { label: "Connect Google / photos / email", done: connectedLabels.length > 0 },
+      { label: "Create your first trip", done: hasTrip },
+    ];
+
+    dashboardChecklist.innerHTML = items
+      .map(
+        (item) => `
+          <li class="${item.done ? "is-complete" : ""}">
+            <span aria-hidden="true">${item.done ? "✓" : "○"}</span>
+            ${escapeHtml(item.label)}
+          </li>
+        `,
+      )
+      .join("");
+  }
+};
+
+const renderConnections = () => {
+  if (!connectionGrid) {
+    return;
+  }
+
+  const profile = getStoredUserProfile();
+  const connected = new Set(profile.connectedAccounts || []);
+
+  connectionGrid.innerHTML = connectionCatalog
+    .map((connection) => {
+      const isConnected = connected.has(connection.id);
+
+      return `
+        <article class="connection-card ${isConnected ? "is-connected" : ""}">
+          <div>
+            <span>${escapeHtml(connection.signal)}</span>
+            <h3>${escapeHtml(connection.label)}</h3>
+            <p>${escapeHtml(connection.benefit)}</p>
+          </div>
+          <button type="button" data-connection-id="${escapeHtml(connection.id)}">
+            ${isConnected ? "Connected" : "Connect"}
+          </button>
+        </article>
+      `;
+    })
+    .join("");
+
+  if (connectedCount) {
+    connectedCount.textContent = pluralize(connected.size, "connected account");
+  }
+};
+
+const toggleConnection = (connectionId) => {
+  const profile = getStoredUserProfile();
+  const connected = new Set(profile.connectedAccounts || []);
+
+  if (connected.has(connectionId)) {
+    connected.delete(connectionId);
+  } else {
+    connected.add(connectionId);
+  }
+
+  saveUserProfile({
+    ...profile,
+    connectedAccounts: [...connected],
+  });
+  renderConnections();
+  renderProfileSummary();
+};
 
 const defaultFriends = ["Maya", "Leo", "Nora"];
 let invitedFriends = [...defaultFriends];
@@ -634,6 +908,68 @@ const renderHomeDashboard = () => {
 });
 
 tripAiClose?.addEventListener("click", closeTripAiDetails);
+
+profileForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  if (!profileNameInput?.value.trim() || !profileEmailInput?.value.trim()) {
+    setProfileStatus("Add your name and email to save your profile.", "error");
+    (!profileNameInput?.value.trim() ? profileNameInput : profileEmailInput)?.focus();
+    return;
+  }
+
+  const existingProfile = getStoredUserProfile();
+  const profile = saveUserProfile({
+    ...existingProfile,
+    name: profileNameInput.value.trim(),
+    email: profileEmailInput.value.trim(),
+    airport: profileAirportInput?.value.trim().toUpperCase() || "",
+    travelStyle: profileStyleInput?.value.trim() || "",
+    signedInAt: existingProfile.signedInAt || new Date().toISOString(),
+  });
+
+  setProfileStatus("Profile saved. Your dashboard home is ready.", "success");
+  setAuthStatus(`Signed in locally as ${profile.email}.`, "success");
+  renderProfileSummary();
+});
+
+googleSigninButton?.addEventListener("click", () => {
+  const existingProfile = getStoredUserProfile();
+  const connectedAccounts = new Set(existingProfile.connectedAccounts || []);
+  connectedAccounts.add("google_account");
+
+  const profile = saveUserProfile({
+    ...existingProfile,
+    name: existingProfile.name || "Google traveler",
+    email: existingProfile.email || "traveler@gmail.com",
+    connectedAccounts: [...connectedAccounts],
+    signedInAt: existingProfile.signedInAt || new Date().toISOString(),
+  });
+
+  if (profileNameInput && !profileNameInput.value) {
+    profileNameInput.value = profile.name;
+  }
+  if (profileEmailInput && !profileEmailInput.value) {
+    profileEmailInput.value = profile.email;
+  }
+
+  setAuthStatus("Google Account connected for this prototype.", "success");
+  renderConnections();
+  renderProfileSummary();
+});
+
+connectionGrid?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-connection-id]");
+
+  if (!button) {
+    return;
+  }
+
+  toggleConnection(button.dataset.connectionId);
+});
+
+renderConnections();
+renderProfileSummary();
 
 renderHomeDashboard();
 renderDashboardPage();
